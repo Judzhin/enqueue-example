@@ -1,0 +1,34 @@
+version: '3.5'
+
+services:
+
+  bunny-ferrari-cli:
+    build:
+      context: ./docker/php/
+      dockerfile: Dockerfile
+    volumes:
+      - ./ferrari:/var/www
+      - composer:/root/.composer/cache
+
+  bunny-lamborghini-cli:
+    build:
+      context: ./docker/php/
+      dockerfile: Dockerfile
+    volumes:
+      - ./lamborghini:/var/www
+      - composer:/root/.composer/cache
+
+  bunny-mq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_ERLANG_COOKIE: SWQOKODSQALRPCLNMEQG
+      RABBITMQ_DEFAULT_USER: rabbit
+      RABBITMQ_DEFAULT_PASS: rabbit
+    ports:
+      - 19191:15672
+      - 56721:5672
+    volumes:
+      - ./docker/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
+
+volumes:
+  composer:

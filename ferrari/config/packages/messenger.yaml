@@ -9,6 +9,10 @@ framework:
     # failed: 'doctrine://default?queue_name=failed'
     # sync: 'sync://'
 
+      amqp:
+        dsn: enqueue://default
+
     routing:
     # Route your messages to the transports
     # 'App\Message\YourMessage': async
+      App\Messenger\FirstMessage\Message: amqp

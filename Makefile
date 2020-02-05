@@ -18,3 +18,15 @@ docker-pull:
 
 docker-build:
 	docker-compose up -d --build
+
+ferrari-cli:
+	docker-compose run --rm bunny-ferrari-cli ${ARGS}
+
+ferrari-console:
+	docker-compose run --rm bunny-ferrari-cli php bin/console ${ARGS}
+
+lamborghini-cli:
+	docker-compose run --rm bunny-lamborghini-cli ${ARGS}
+
+lamborghini-console:
+	docker-compose run --rm bunny-lamborghini-cli php bin/console ${ARGS}

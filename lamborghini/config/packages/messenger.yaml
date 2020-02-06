@@ -21,31 +21,61 @@ framework:
       # failed: 'doctrine://default?queue_name=failed'
 
       prepare_process_message:
-        dsn: enqueue://default
+        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
         serializer: App\Message\PrepareProcessSerializer
+        retry_strategy:
+          delay: 500
         options:
-          topic:
+          exchange:
             name: supercar
             type: direct
-          queue:
-            name: process
-            bindingKey:
+            default_publish_routing_key: process
+          queues:
+            process: ~
 
       result_message:
-        dsn: enqueue://default
+        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
         serializer: messenger.transport.symfony_serializer
+        retry_strategy:
+          delay: 500
         options:
-          topic:
+          exchange:
             name: supercar
             type: direct
-          queue:
-            name: result
-            bindingKey: result
+            default_publish_routing_key: result
+          queues:
+            result:
+              binding_keys: [result]
+
+#      prepare_process_message:
+#        dsn: enqueue://default
+#        serializer: App\Message\PrepareProcessSerializer
+#        retry_strategy:
+#          delay: 500
+#        options:
+#          topic:
+#            name: supercar
+#            type: direct
+#          queue:
+#            name: process
+
+#      result_message:
+#        dsn: enqueue://default
+#        serializer: messenger.transport.symfony_serializer
+#        retry_strategy:
+#          delay: 500
+#        options:
+#          topic:
+#            name: supercar
+#            type: direct
+#          queue:
+#            name: result
+#            bindingKey: result
 
       sync: 'sync://'
 
-
     routing:
       # Route your messages to the transports
+      # App\Message\PrepareProcessMessage: prepare_process_message
       App\Message\ProcessMessage: sync
-      # App\Message\ResultMessage: result_message
+      App\Message\ResultMessage: result_message

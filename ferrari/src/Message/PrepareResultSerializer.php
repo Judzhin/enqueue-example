@@ -8,10 +8,10 @@ use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface as T
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * Class PrepareProcessSerializer
+ * Class PrepareResultSerializer
  * @package App\Message
  */
-class PrepareProcessSerializer implements TransportSerializer
+class PrepareResultSerializer implements TransportSerializer
 {
     /** @var SerializerInterface */
     private $serializer;
@@ -20,8 +20,7 @@ class PrepareProcessSerializer implements TransportSerializer
     private $logger;
 
     /**
-     * PrepareProcessSerializer constructor.
-     *
+     * PrepareResultSerializer constructor.
      * @param SerializerInterface $serializer
      * @param LoggerInterface $logger
      */
@@ -33,32 +32,21 @@ class PrepareProcessSerializer implements TransportSerializer
 
     /**
      * @inheritDoc
-     *
-     * @param array $encodedEnvelope
-     * @return Envelope
      */
     public function decode(array $encodedEnvelope): Envelope
     {
-        /** @var PrepareProcessMessage $message */
-        $message = $this->serializer->deserialize($encodedEnvelope['body'], PrepareProcessMessage::class, 'json');
+        /** @var PrepareResultMessage $message */
+        $message = $this->serializer->deserialize($encodedEnvelope['body'], PrepareResultMessage::class, 'json');
 
         $this->logger->info(sprintf(
-            'Decode process message "%s"', $message->getContent()
+            'Decode result message "%s"', $message->getContent()
         ));
 
-        /** @var Envelope $envelope */
-        $envelope = (new Envelope($message));
-        // $envelope->with(new BusNameStamp('process.bus'));
-
-        return $envelope;
+        return new Envelope($message);
     }
 
     /**
      * @inheritDoc
-     *
-     * @param Envelope $envelope
-     * @return array
-     * @throws \Exception
      */
     public function encode(Envelope $envelope): array
     {

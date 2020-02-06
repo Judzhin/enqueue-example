@@ -2,16 +2,17 @@
 
 namespace App\MessageHandler;
 
-use App\Message\PrepareProcessMessage;
+use App\Message\ProcessMessage;
 use App\Message\ResultMessage;
+use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
- * Class PrepareMessageHandler
+ * Class ProcessMessageHandler
  * @package App\MessageHandler
  */
-class PrepareProcessMessageHandler implements MessageHandlerInterface
+class ProcessMessageHandler implements MessageHandlerInterface
 {
     /** @var MessageBusInterface */
     private $commandBus;
@@ -26,16 +27,12 @@ class PrepareProcessMessageHandler implements MessageHandlerInterface
     }
 
     /**
-     * @param PrepareProcessMessage $message
+     * @param ProcessMessage $message
      */
-    public function __invoke(PrepareProcessMessage $message): void
+    public function __invoke(ProcessMessage $message): void
     {
         $this->commandBus->dispatch(new ResultMessage(
             $message->getContent() . "\n Return to start handler."
         ));
-
-        // $this->commandBus->dispatch(new ProcessMessage(
-        //     $message->getContent() . "\n Move message to process."
-        // ));
     }
 }

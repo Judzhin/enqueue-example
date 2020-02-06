@@ -25,6 +25,12 @@ ferrari-cli:
 ferrari-console:
 	docker-compose run --rm bunny-ferrari-cli php bin/console ${ARGS}
 
+ferrari-watch:
+	docker-compose run --rm bunny-ferrari-cli php bin/console messenger:consume -vv prepare_result_message
+
+ferrari-stop-watching:
+	docker-compose run --rm bunny-ferrari-cli php bin/console messenger:stop-workers
+
 lamborghini-cli:
 	docker-compose run --rm bunny-lamborghini-cli ${ARGS}
 
@@ -32,7 +38,7 @@ lamborghini-console:
 	docker-compose run --rm bunny-lamborghini-cli php bin/console ${ARGS}
 
 lamborghini-watch:
-	docker-compose run --rm bunny-lamborghini-cli php bin/console messenger:consume -vvv prepare_process_message
+	docker-compose run --rm bunny-lamborghini-cli php bin/console messenger:consume -vv prepare_process_message
 
 lamborghini-stop-watching:
 	docker-compose run --rm bunny-lamborghini-cli php bin/console messenger:stop-workers

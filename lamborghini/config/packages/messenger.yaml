@@ -65,6 +65,7 @@ framework:
         retry_strategy:
           delay: 500
         options:
+          delayStrategy: Enqueue\AmqpTools\RabbitMqDelayPluginDelayStrategy
           topic:
             name: supercar
             type: direct

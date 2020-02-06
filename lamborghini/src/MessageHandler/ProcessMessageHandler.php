@@ -28,11 +28,12 @@ class ProcessMessageHandler implements MessageHandlerInterface
 
     /**
      * @param ProcessMessage $message
+     * @throws \Exception
      */
     public function __invoke(ProcessMessage $message): void
     {
-        $this->commandBus->dispatch(new ResultMessage(
-            $message->getContent() . "\n Return to start handler."
-        ));
+        $this->commandBus->dispatch(new ResultMessage(sprintf(
+            "%s\n Return to start handler at %s.", $message->getContent(), (new \DateTime)->format('d-m-Y')
+        )));
     }
 }

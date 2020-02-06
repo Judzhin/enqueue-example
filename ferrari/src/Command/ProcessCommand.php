@@ -3,12 +3,15 @@
 namespace App\Command;
 
 use App\Message\ProcessMessage;
+use Enqueue\MessengerAdapter\EnvelopeItem\TransportConfiguration;
+use Interop\Amqp\AmqpMessage;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
@@ -55,12 +58,27 @@ class ProcessCommand extends Command
         /** @var SymfonyStyle $io */
         $io = new SymfonyStyle($input, $output);
 
+        $transportConfig = (new TransportConfiguration())
+            // commmon options have a convenient method
+            ->setDeliveryDelay(5000)
+            ->setTopic('supercar')
+
+            // other transport-specific options are set via metadata
+            // example custom option for AmqpMessage
+            // each "metadata" will map to a setter on your message
+            // will result in setDeliveryMode(AmqpMessage::DELIVERY_MODE_PERSISTENT)
+            // being called
+            ->addMetadata('deliveryMode', AmqpMessage::DELIVERY_MODE_PERSISTENT)
+        ;
+
         /** @var ProcessMessage $message */
         $message = new ProcessMessage(sprintf(
             'Send car work to process at %s', (new \DateTime)->format('d-m-Y H:i:s')
         ));
 
-        $this->commonBus->dispatch($message);
+        $this->commonBus
+            ->dispatch(new Envelope($message))
+            ->with($transportConfig);
 
         $io->writeln(sprintf('Send message "%s"', $message->getContent()));
 

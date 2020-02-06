@@ -30,5 +30,8 @@ services:
     volumes:
       - ./docker/rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins
 
+  bunny-pubsub:
+    image: bigtruedata/gcloud-pubsub-emulator
+
 volumes:
   composer:

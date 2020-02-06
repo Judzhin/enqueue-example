@@ -46,6 +46,7 @@ framework:
         dsn: enqueue://default
         serializer: messenger.transport.symfony_serializer
         options:
+          delayStrategy: Enqueue\AmqpTools\RabbitMqDelayPluginDelayStrategy
           topic:
             name: supercar
             type: direct

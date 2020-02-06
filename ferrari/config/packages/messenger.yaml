@@ -15,54 +15,54 @@ framework:
       # failed: 'doctrine://default?queue_name=failed'
       # sync: 'sync://'
 
+#      process_message:
+#        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+#        serializer: messenger.transport.symfony_serializer
+#        retry_strategy:
+#          delay: 500
+#        options:
+#          exchange:
+#            name: supercar
+#            type: direct
+#            default_publish_routing_key: process
+#          queues:
+#            process:
+#              binding_keys: [process]
+#
+#      prepare_result_message:
+#        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+#        serializer: App\Message\PrepareResultSerializer
+#        retry_strategy:
+#          delay: 500
+#        options:
+#          exchange:
+#            name: supercar
+#            type: direct
+#            default_publish_routing_key: result
+#          queues:
+#            result: ~
+
       process_message:
-        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+        dsn: enqueue://default
         serializer: messenger.transport.symfony_serializer
-        retry_strategy:
-          delay: 500
         options:
-          exchange:
+          topic:
             name: supercar
             type: direct
-            default_publish_routing_key: process
-          queues:
-            process:
-              binding_keys: [process]
+          queue:
+            name: process
+            bindingKey: process
 
       prepare_result_message:
-        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
-        serializer: App\Message\PrepareResultSerializer
-        retry_strategy:
-          delay: 500
+        dsn: enqueue://default
+        serializer: messenger.transport.symfony_serializer
         options:
-          exchange:
+          topic:
             name: supercar
             type: direct
-            default_publish_routing_key: result
-          queues:
-            result: ~
-
-#      process_message:
-#        dsn: enqueue://default
-#        serializer: messenger.transport.symfony_serializer
-#        options:
-#          topic:
-#            name: supercar
-#            type: direct
-#          queue:
-#            name: process
-#            bindingKey: process
-
-#      prepare_result_message:
-#        dsn: enqueue://default
-#        serializer: messenger.transport.symfony_serializer
-#        options:
-#          topic:
-#            name: supercar
-#            type: direct
-#          queue:
-#            name: result
-#            bindingKey: result
+          queue:
+            name: result
+            bindingKey: result
 
     routing:
       # Route your messages to the transports

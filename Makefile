@@ -30,3 +30,9 @@ lamborghini-cli:
 
 lamborghini-console:
 	docker-compose run --rm bunny-lamborghini-cli php bin/console ${ARGS}
+
+lamborghini-watch:
+	docker-compose run --rm bunny-lamborghini-cli php bin/console messenger:consume -vvv second_message
+
+lamborghini-stop-watching:
+	docker-compose run --rm bunny-lamborghini-cli php bin/console messenger:stop-workers

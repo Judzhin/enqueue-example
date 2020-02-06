@@ -2,34 +2,35 @@
 
 namespace App\Command;
 
-use App\Messenger\FirstMessage\Message;
+use App\Message\ProcessMessage;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
- * Class StartCommand
+ * Class ProcessCommand
  * @package App\Command
  */
-class StartCommand extends Command
+class ProcessCommand extends Command
 {
     /** @var MessageBusInterface */
-    private $bus;
+    private $commonBus;
 
-    protected static $defaultName = 'mq:start';
+    protected static $defaultName = 'mq:process';
 
     /**
-     * StartCommand constructor.
+     * ProcessCommand constructor.
      *
-     * @param MessageBusInterface $bus
+     * @param MessageBusInterface $commonBus
      */
-    public function __construct(MessageBusInterface $bus)
+    public function __construct(MessageBusInterface $commonBus)
     {
-        $this->bus = $bus;
+        $this->commonBus = $commonBus;
         parent::__construct(self::$defaultName);
     }
 
@@ -48,13 +49,21 @@ class StartCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
+     * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var SymfonyStyle $io */
         $io = new SymfonyStyle($input, $output);
 
-        $this->bus->dispatch(new Message('First MEssage'));
+        /** @var ProcessMessage $message */
+        $message = new ProcessMessage(sprintf(
+            'Send car work to process at %s', (new \DateTime)->format('d-m-Y H:i:s')
+        ));
+
+        $this->commonBus->dispatch($message);
+
+        $io->writeln(sprintf('Send message "%s"', $message->getContent()));
 
         return 0;
     }

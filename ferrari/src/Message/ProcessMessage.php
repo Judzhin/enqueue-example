@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Messenger\FirstMessage;
+namespace App\Message;
 
 /**
- * Class Message
- * @package App\Messenger\FirstMessage
+ * Class ProcessMessage
+ * @package App\Message
  */
-class Message
+class ProcessMessage
 {
     /** @var string */
-    private $content;
+    public $content;
 
     /**
-     * Message constructor.
-     *
+     * StartMessage constructor.
      * @param string $content
      */
     public function __construct(string $content)

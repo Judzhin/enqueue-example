@@ -29,4 +29,4 @@ framework:
     routing:
     # Route your messages to the transports
     # 'App\Message\YourMessage': async
-      App\Message\StartMessage: start_message
+      App\Message\ProcessMessage: process_message

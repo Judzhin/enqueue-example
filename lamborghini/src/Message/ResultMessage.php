@@ -3,16 +3,16 @@
 namespace App\Message;
 
 /**
- * Class PrepareProcessMessage
+ * Class ResultMessage
  * @package App\Message
  */
-final class PrepareProcessMessage
+class ResultMessage
 {
     /** @var string */
     private $content;
 
     /**
-     * PrepareProcessMessage constructor.
+     * ResultMessage constructor.
      *
      * @param string $content
      */

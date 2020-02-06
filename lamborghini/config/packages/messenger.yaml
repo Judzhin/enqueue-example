@@ -1,25 +1,24 @@
 framework:
   messenger:
 
-#    default_bus: command.bus
-#      buses:
-#        command.bus:
-#          # middleware:
-#          #   - App\Messenger\MessageMiddleware
-#        event.bus:
-#          # default_middleware: allow_no_handlers
-#          # middleware:
-#          #   - App\Messenger\MessageMiddleware
+    default_bus: command.bus
 
+    buses:
+      command.bus:
+      # middleware:
+      #   - App\Messenger\MessageMiddleware
+      process.bus:
+      # default_middleware: allow_no_handlers
+      # middleware:
+      #   - App\Messenger\MessageMiddleware
 
     # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
     # failure_transport: failed
 
     transports:
-    # https://symfony.com/doc/current/messenger.html#transport-configuration
-    # async: '%env(MESSENGER_TRANSPORT_DSN)%'
-    # failed: 'doctrine://default?queue_name=failed'
-    # sync: 'sync://'
+      # https://symfony.com/doc/current/messenger.html#transport-configuration
+      # async: '%env(MESSENGER_TRANSPORT_DSN)%'
+      # failed: 'doctrine://default?queue_name=failed'
 
       prepare_process_message:
         dsn: enqueue://default
@@ -30,8 +29,23 @@ framework:
             type: direct
           queue:
             name: process
-            bindingKey: process
+            bindingKey:
+
+      result_message:
+        dsn: enqueue://default
+        serializer: messenger.transport.symfony_serializer
+        options:
+          topic:
+            name: supercar
+            type: direct
+          queue:
+            name: result
+            bindingKey: result
+
+      sync: 'sync://'
+
 
     routing:
-    # Route your messages to the transports
-    # 'App\Message\YourMessage': async
+      # Route your messages to the transports
+      App\Message\ProcessMessage: sync
+      # App\Message\ResultMessage: result_message

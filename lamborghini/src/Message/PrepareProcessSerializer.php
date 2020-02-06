@@ -4,6 +4,7 @@ namespace App\Message;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Stamp\BusNameStamp;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface as TransportSerializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -46,7 +47,11 @@ class PrepareProcessSerializer implements TransportSerializer
             'Decode process message "%s"', $message->getContent()
         ));
 
-        return new Envelope($message);
+        /** @var Envelope $envelope */
+        $envelope = (new Envelope($message));
+        $envelope->with(new BusNameStamp('process.bus'));
+
+        return $envelope;
     }
 
     /**
@@ -54,9 +59,10 @@ class PrepareProcessSerializer implements TransportSerializer
      *
      * @param Envelope $envelope
      * @return array
+     * @throws \Exception
      */
     public function encode(Envelope $envelope): array
     {
-        // TODO: Implement encode() method.
+        throw new \Exception('Transport not support sending message');
     }
 }

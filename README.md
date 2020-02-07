@@ -1,1 +1,1 @@
-# enqueue-example
+# rabbitmq-example

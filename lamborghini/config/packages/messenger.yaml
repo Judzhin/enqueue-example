@@ -20,58 +20,32 @@ framework:
       # async: '%env(MESSENGER_TRANSPORT_DSN)%'
       # failed: 'doctrine://default?queue_name=failed'
 
-#      prepare_process_message:
-#        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
-#        serializer: App\Message\PrepareProcessSerializer
-#        retry_strategy:
-#          delay: 500
-#        options:
-#          exchange:
-#            name: supercar
-#            type: direct
-#            default_publish_routing_key: process
-#          queues:
-#            process: ~
-#
-#      result_message:
-#        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
-#        serializer: messenger.transport.symfony_serializer
-#        retry_strategy:
-#          delay: 500
-#        options:
-#          exchange:
-#            name: supercar
-#            type: direct
-#            default_publish_routing_key: result
-#          queues:
-#            result:
-#              binding_keys: [result]
-
       prepare_process_message:
-        dsn: enqueue://default
+        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
         serializer: App\Message\PrepareProcessSerializer
         retry_strategy:
           delay: 500
         options:
-          topic:
+          exchange:
             name: supercar
             type: direct
-          queue:
-            name: process
+            default_publish_routing_key: process
+          queues:
+            process: ~
 
       result_message:
-        dsn: enqueue://default
+        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
         serializer: messenger.transport.symfony_serializer
         retry_strategy:
           delay: 500
         options:
-          delayStrategy: Enqueue\AmqpTools\RabbitMqDelayPluginDelayStrategy
-          topic:
+          exchange:
             name: supercar
             type: direct
-          queue:
-            name: result
-            bindingKey: result
+            default_publish_routing_key: result
+          queues:
+            result:
+              binding_keys: [result]
 
       sync: 'sync://'
 

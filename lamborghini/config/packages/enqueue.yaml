@@ -1,4 +1,7 @@
 enqueue:
   default:
-    transport: '%env(resolve:ENQUEUE_DSN)%'
+    transport:
+      dsn: '%env(resolve:ENQUEUE_DSN)%'
+      projectId: '%env(GOOGLE_PROJECT_ID)%'
+      keyFilePath: '%env(GOOGLE_APPLICATION_CREDENTIALS)%'
     client: null

@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "enqueue/amqp-bunny": "^0.10.1",
+        "enqueue/gps": "^0.10.1",
         "sroze/messenger-enqueue-transport": "^0.4.0",
         "symfony/console": "5.0.*",
         "symfony/dotenv": "5.0.*",
